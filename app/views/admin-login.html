@@ -1,0 +1,32 @@
+[[layout=admin]]
+<div class="top-bar">
+    <div class="top-bar-left">
+        <ul class="menu">
+            <li><a href="/"><strong>ATC Example</strong></a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="row column">
+    <form action="" method="post">
+
+        [[__errors]]
+        <div class="row">
+            <div class="large-6 columns">
+                <label>Username
+                    <input type="text" name="form[username]" placeholder="Username" required />
+                </label>
+            </div>
+            <div class="large-6 columns">
+                <label>Password
+                    <input type="password" name="form[password]" placeholder="Password" required />
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                <input type="submit" class="button" value="Log In" />
+            </div>
+        </div>
+    </form>
+</div>

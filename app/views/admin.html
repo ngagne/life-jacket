@@ -1,0 +1,42 @@
+[[layout=admin]]
+<div class="top-bar">
+    <div class="top-bar-left">
+        <ul class="menu">
+            <li><a href="/"><strong>ATC Example</strong></a></li>
+        </ul>
+    </div>
+    <div class="top-bar-right">
+        <ul class="menu">
+            <li><a href="/admin-logout">Log Out</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <h1>Admin Area</h1>
+</div>
+
+<form action="" method="post" enctype="multipart/form-data">
+    <div class="row collapse">
+
+        <div class="medium-3 columns">
+            <ul class="tabs vertical" id="adminTabs" data-tabs>
+                <li class="tabs-title is-active"><a href="#panel_settings" aria-selected="true">Settings</a></li>
+                [[__nav_items]]
+            </ul>
+        </div>
+
+        <div class="medium-9 columns">
+            <div class="tabs-content vertical" data-tabs-content="adminTabs">
+                <div class="tabs-panel is-active" id="panel_settings">
+                    [[__settings]]
+                </div>
+
+                [[__page_strings]]
+            </div>
+
+            <input type="submit" class="button clearfix float-right" value="Save Changes" />
+        </div>
+
+    </div>
+</form>

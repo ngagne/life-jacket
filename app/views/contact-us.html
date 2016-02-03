@@ -1,0 +1,44 @@
+
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+
+    <h2 class="headline">
+        <span>Contact</span> Us
+    </h2>
+
+    [[intro]]
+
+    [[__errors]]
+
+    <form action="" method="post">
+        <div class="row">
+            <div class="large-6 columns">
+                <label>Name
+                    <input type="text" name="form[name]" placeholder="Name" required />
+                </label>
+            </div>
+            <div class="large-6 columns">
+                <label>Email
+                    <input type="email" name="form[email]" placeholder="Email" required />
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-6 columns">
+                <label>Message
+                    <textarea name="form[message]" placeholder="Message" rows="4" required></textarea>
+                </label>
+            </div>
+            <div class="large-6 columns">
+                <label>Captcha
+                    <div class="g-recaptcha" data-sitekey="[[__recaptcha_sitekey]]"></div>
+                </label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="large-12 columns">
+                <input type="submit" class="button" value="Send" />
+                <input type="hidden" name="form_submit" value="contact-us" />
+            </div>
+        </div>
+    </form>

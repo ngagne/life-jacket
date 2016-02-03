@@ -1,0 +1,22 @@
+{
+  "name": "life-jacket",
+  "version": "0.9.0",
+  "description": "",
+  "main": "Gruntfile.js",
+  "dependencies": {
+    "grunt": "~0.4.5",
+    "matchdep": "~0.3.0"
+  },
+  "devDependencies": {
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-uglify": "^0.9.2",
+    "grunt-contrib-watch": "*",
+    "grunt-exec": "^0.4.6",
+    "grunt-sass": "^1.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "GPL-3.0"
+}

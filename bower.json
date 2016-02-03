@@ -1,0 +1,21 @@
+{
+  "name": "life-jacket",
+  "version": "0.9.0",
+  "authors": [
+    "Nick <nick@artifextech.com>"
+  ],
+  "description": "The Life Jacket framework allows web designers/developers to quickly and naturally create a website (using standard HTML files) while allowing clients to safely update only the individual pieces of content that they need. Happy clients and happy designers.",
+  "main": "",
+  "moduleType": [],
+  "license": "GPL-3.0",
+  "homepage": "http://www.artifextech.com/",
+  "private": true,
+  "ignore": [
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "foundation-sites": "^6.1.2",
+    "swiftmailer": "https://github.com/swiftmailer/swiftmailer.git#^5.4.1"
+  }
+}
