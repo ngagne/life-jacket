@@ -1,7 +1,5 @@
 tmp/**
-public/css/**
-public/js/**
-public/img/**
+public/img/uploads/**
 node_modules
 .sass-cache
 bower_components
