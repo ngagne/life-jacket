@@ -74,7 +74,7 @@ class Controller {
         $strings = $stringsHandler->strings;
 
         // handle form submission
-        if (!empty($_POST['data'])) {
+        if (!empty($_POST['data']) && $this->isCsrfValid()) {
             $newStrings = array_replace_recursive($strings, $_POST['data']);
 
             // save any upload images
@@ -172,6 +172,11 @@ class Controller {
 
             if ($username == $config->admin_username || $password == $config->admin_password) {
                 $session->set('is_logged_in', true);
+
+                // generate and store CSRF token
+                $csrf = md5(uniqid(rand()));
+                $session->set('csrf', $csrf);
+
                 $this->router->redirect('/admin');
             }
 
@@ -188,6 +193,18 @@ class Controller {
         $session = Session::getInstance();
         $session->set('is_logged_in', false);
         $this->router->redirect('/admin');
+    }
+
+    /**
+     * Check for valid CSRF token
+     *
+     * @return bool
+     */
+    protected function isCsrfValid() {
+        $session = Session::getInstance();
+        $csrf = $session->get('csrf', '');
+
+        return $csrf == isset($_POST['csrf']) ? $_POST['csrf'] : '';
     }
 
     /**
@@ -292,10 +309,19 @@ class Controller {
         $config = Config::getInstance();
         $html = $this->view->render();
 
+        // handle CSRF token
+        if (strpos($html, '[[__csrf]]') !== false) {
+            $session = Session::getInstance();
+            $csrf = $session->get('csrf', '');
+            $html = str_replace('[[__csrf]]', $csrf, $html);
+        }
+
         // handle extra data loaded before </body>
         $htmlBeforeBodyClose = array();
         if (!empty($_POST['form'])) {
-            $htmlBeforeBodyClose[] = '<script>document.addEventListener("DOMContentLoaded",function(){populateForm(' . json_encode($_POST['form']) . ')});</script>';
+            // sanitize form data
+            $formData = array_map(array($this, 'sanitizeArray'), $_POST['form']);
+            $htmlBeforeBodyClose[] = '<script>document.addEventListener("DOMContentLoaded",function(){populateForm(' . json_encode($formData) . ')});</script>';
         }
         $html = str_replace('</body>', implode("\n", $htmlBeforeBodyClose) . "\n" . '</body>', $html);
 
@@ -306,5 +332,9 @@ class Controller {
         }
 
         die($html);
+    }
+
+    protected function sanitizeArray($n) {
+        return htmlspecialchars($n, ENT_QUOTES, 'UTF-8');
     }
 }
