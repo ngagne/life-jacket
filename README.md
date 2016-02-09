@@ -4,7 +4,7 @@ The Life Jacket framework allows web designers/developers to quickly and natural
 
 ## Requirements
 
-  * PHP 5.3+
+Life Jacket can run on any version of PHP at or above 5.3 (including PHP 7). However, we recommend at least the latest version of 5.5 as older versions are no longer maintained and may have security vulnerabilities.
   
 ## Installation
 
@@ -57,6 +57,7 @@ Tokens helpers have a specific suffix in the format of `[[.../suffix]]` and allo
   * `[[__site_name]]` title of the website
   * `[[__errors]]` form validation errors for display
   * `[[__content]]` defines the content area within a layout
+  * `[[__csrf]]` generates a CSRF token stored in the user's session (to protect the administrative area form from a CSRF attack)
   
 #### Property Tokens
 
@@ -100,7 +101,6 @@ Forms can be generated using standard HTML within the view file and must contain
 The application will process most HTML5 validation attributes (required, pattern, type="email", etc.) 
  
 If a validation error occurs, the application will populate a list of error messages into the `[[__errors]]` token. HTML for these validation messages are stored in the `/app/layouts/_system/` directory.
-
   
 ### Emails
 When a form is submitted, an email will be generated containing a list of the submitted data and sent to the email addresses specified in the `system_mail_to` configuration file setting. Specific email settings are stored in the `/app/config/config.ini` file.
@@ -132,3 +132,6 @@ Application settings are stored in the `/app/config/config.ini` file. The config
   
 ## Administration
 The administrative area can be accessed using the /admin URL. The username and password is specified in the `/app/config/config.ini` file. If cache is enabled, it will be reloaded when saving any change in the admin area.
+
+## Updates, Questions, and Support
+Please submit any bugs you may find through the issue tracking here on GitHub. This project is meant for web designers / developers foremost, not end users. You will need knowledge of HTML and CSS at the very least in order to successfully use this tool to create websites. Additional knowledge and experience with NPM, Grunt, and PHP will benefit you as well. If you require support, would like to have us build you a website using this platform, or need any other custom web design or development services, please contact us at info@artifextech.com and we will be happy to discuss your project requirements and put our team of talented designers and developers to work for you. 
