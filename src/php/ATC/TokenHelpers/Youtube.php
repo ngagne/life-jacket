@@ -3,7 +3,7 @@ namespace ATC\TokenHelpers;
 
 use ATC\Config;
 
-class Youtube extends Text
+class Youtube extends AbstractTokenHelper
 {
     protected $file = 'input-youtube.html';
 

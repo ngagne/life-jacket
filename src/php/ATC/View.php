@@ -74,7 +74,7 @@ class View
         if (isset($this->stringsHandler->strings[$this->router->tokenGroup])) {
             foreach ($this->stringsHandler->strings[$this->router->tokenGroup] as $token => $string) {
                 // detect special suffixes
-                $suffix = 'wysiwyg';
+                $suffix = 'textarea';
                 $suffixOffset = strpos($token, '/');
                 if ($suffixOffset !== false) {
                     $suffix = substr($token, $suffixOffset + 1);

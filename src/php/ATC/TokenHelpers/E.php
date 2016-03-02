@@ -1,7 +1,7 @@
 <?php
 namespace ATC\TokenHelpers;
 
-class E extends Text
+class E extends AbstractTokenHelper
 {
 
     public function getString() {

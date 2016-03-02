@@ -239,7 +239,7 @@ class Controller {
             $rows = array();
             foreach ($items as $key => $value) {
                 // detect special suffixes
-                $suffix = $fieldGroup == '' ? 'wysiwyg' : 'text';
+                $suffix = $fieldGroup == '' ? 'textarea' : 'text';
                 $suffixOffset = strpos($key, '/');
                 if ($suffixOffset !== false) {
                     $suffix = substr($key, $suffixOffset + 1);

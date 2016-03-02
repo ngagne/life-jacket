@@ -3,7 +3,7 @@ namespace ATC\TokenHelpers;
 
 use ATC\Config;
 
-class Img extends Text
+class Img extends AbstractTokenHelper
 {
     protected $file = 'input-file.html';
 

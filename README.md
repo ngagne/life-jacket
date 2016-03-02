@@ -68,7 +68,7 @@ Tokens helpers have a specific suffix in the format of `[[.../suffix]]` and allo
   
 #### Special Suffix Tokens
   * `[[.../img]]` creates an image URL which can be edited through the admin area. A unique string should be used before the `|img` suffix just as you would with a standard token.
-  * `[[.../e]]` removes any HTML tags before rendering to the page.
+  * `[[.../html]]` displays a WYSIWYG editor in the admin area for input of basic HTML elements: `<p> <br> <a> <em> <strong>`.
   * `[[.../youtube]]` extracts the YouTube video ID from an embed code or url.
 
 #### Custom Token Helpers
