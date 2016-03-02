@@ -83,7 +83,7 @@ module.exports = function(grunt) {
                 tasks: ['js:admin']
             },
             sass: {
-                files: ['bower_components/**/*.scss'],
+                files: ['bower_components/**/*.scss', 'src/scss/*.scss'],
                 tasks: ['sass:app', 'sass:admin']
             }
         }

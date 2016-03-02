@@ -1,7 +1,167 @@
-legend{
-  font-weight:bold;
+@import "admin-settings";
+@import "foundation";
+@import "icons";
+@include foundation-everything;
+
+@mixin transition($transition...) {
+    -moz-transition:    $transition;
+    -o-transition:      $transition;
+    -webkit-transition: $transition;
+    transition:         $transition;
 }
-.admin_image{
-  max-width:128px;
-  max-height:128px;
+
+.animate-in{
+    @include transition(all, 500ms, ease);
+    opacity: 0;
+    margin-left: -20px;
 }
+.loaded{
+    opacity: 1!important;
+    margin-left:0px!important;
+}
+
+
+body{
+    background:#249CA3;
+}
+.button{
+    border-radius: 20px;
+}
+.login-section{
+    padding-top: 85px;
+    background: #fff;
+    height: 100%;
+    .button{
+        padding: 0.85em 2em;
+    }
+    form{
+        width: 100%;
+    }
+}
+.header{
+    width: 100%;
+	padding: 10px 0;
+	background:#fff;
+    border-bottom: 1px solid #dfdede;
+    z-index: 999;
+	.logo{
+		background: url('../img/admin/lifejacket-logo.png') no-repeat;
+		width: 140px;
+		height: 44px;
+		display: block;
+		float:left;
+	}
+	.button{
+		float:right;
+		border-radius: 20px;
+		padding: 5px 15px;
+		    margin: 10px 0 0 0;
+	}
+    .menu-icon{
+        margin-top: 10px;
+        float:right;
+        width: 30px;
+        height: 20px;
+        outline: none;
+        &:after{
+                background: #1f858b;
+                box-shadow:0 9px 0 #1f858b,0 18px 0 #1f858b;
+                height: 3px;
+        }
+        
+    }
+}
+
+.off-canvas.position-right{
+    padding-top: 20px;
+}
+.sidebar{
+	background: $primary-color;
+	padding: 0px;
+    padding-top: 15px;
+    min-height:100vh;
+    padding-top: 65px;
+}
+#adminTabs{
+		background: none;
+		border: none;
+        @extend .animate-in;
+		li{
+            outline: none;
+			&.is-active{
+				a{
+                    background: #198990;
+                    color:#fff;
+                    border-left: 5px solid #F26822;
+
+                    &:hover{
+                        background: #198990;
+                    }
+                    &:focus, &[aria-selected='true']{
+                        background: #198990;
+                    }
+				}
+			}
+			a{
+				color:#d8d8d8;
+                outline: none;
+				font-size: 14px;
+				font-weight: 600;
+				text-transform: uppercase;
+                transition: all, 300ms ease;
+                padding: 12px 20px;
+                &:focus, &[aria-selected='true']{
+                    background: none;
+                }
+                &:hover{
+                    background:#2DADB5;
+                    color:#fff;
+                }
+                &:before{
+                    transition: all, 300ms ease;
+                    content: "\e900";
+                    @extend [class^="icon-"];
+                    margin-right: 10px;
+                    color:#fff;
+                    font-size: 16px;
+                }
+                &#panel_settings-label:before{
+                    content: "\e902";
+                }
+                &#panel__global-label:before{
+                    content: "\e901";
+                }
+			}
+		}
+	}
+.content{
+    padding-top: 65px;
+    min-height:100vh;
+    .tabs-panel{
+        padding:0px;
+    }
+     .tabs-content.vertical{
+        background:none;
+        border:none;
+        
+         @extend .animate-in;
+         @include transition(all, 500ms 300ms, ease);
+       
+    }
+     fieldset{
+         background:#fff;
+         border:1px solid #dfdede;
+         label{
+
+         }
+         h3{
+             color:$primary-color;
+             font-size: 24px;
+             margin-bottom: 15px;
+         }
+     }
+     
+}
+
+
+

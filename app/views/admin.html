@@ -1,44 +1,52 @@
 [[layout=admin]]
-<div class="top-bar">
-    <div class="top-bar-left">
-        <ul class="menu">
-            <li><a href="/"><strong>ATC Example</strong></a></li>
-        </ul>
-    </div>
-    <div class="top-bar-right">
-        <ul class="menu">
-            <li><a href="/admin-logout">Log Out</a></li>
-        </ul>
-    </div>
-</div>
 
-<div class="row">
-    <h1>Admin Area</h1>
-</div>
 
-<form action="" method="post" enctype="multipart/form-data">
-    <div class="row collapse">
+<div class="off-canvas-wrapper">
+    <div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+        <div class="off-canvas position-right" id="offCanvasRight" data-off-canvas data-position="right">
 
-        <div class="medium-3 columns">
-            <ul class="tabs vertical" id="adminTabs" data-tabs>
-                <li class="tabs-title is-active"><a href="#panel_settings" aria-selected="true">Settings</a></li>
+            <ul class="tabs vertical animate-in" id="adminTabs" data-tabs>
+                <li class="tabs-title"><a href="#panel_settings">Settings</a></li>
                 [[__nav_items]]
             </ul>
         </div>
-
-        <div class="medium-9 columns">
-            <div class="tabs-content vertical" data-tabs-content="adminTabs">
-                <div class="tabs-panel is-active" id="panel_settings">
-                    [[__settings]]
+        <div class="off-canvas-content" data-off-canvas-content>
+            <form action="" method="post" enctype="multipart/form-data">
+                <div class="row header sticky">
+                    <div class="column large-12">
+                        <a class="logo" href="/admin"></a>
+                        <button type="button" class="show-for-small-only open-menu menu-icon" data-toggle="offCanvasRight"></button>
+                        <a href="/admin-logout" class="hide-for-small-only button">Log Out</a>
+                    </div>
                 </div>
+                <div class="row content-row">
+                    <div class="medium-3 columns sidebar hide-for-small-only">
+                        <ul class="tabs vertical animate-in" id="adminTabs" data-tabs  >
+                            <li class="tabs-title"><a href="#panel_settings">Settings</a></li>
+                            [[__nav_items]]
+                            
+                        </ul>
+                    </div>
+                    <div class="medium-9 small-large columns content">
+                        <div class="tabs-content vertical animate-in" data-tabs-content="adminTabs">
+                            [[__page_strings]]
+                            <div class="tabs-panel" id="panel_settings"  >
+                                [[__settings]]
+                            </div>
+                            <input type="submit" class="button" value="Save Changes" />
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="csrf" value="[[__csrf]]" />
+            </form>
 
-                [[__page_strings]]
-            </div>
 
-            <input type="submit" class="button clearfix float-right" value="Save Changes" />
+
+
+
         </div>
-
     </div>
+</div>
 
-    <input type="hidden" name="csrf" value="[[__csrf]]" />
-</form>
+
+

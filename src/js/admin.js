@@ -1,3 +1,5 @@
+$(document).foundation();
+
 jQuery(function($){
     // init WYSIWYG editors
     $('.input-wysiwyg').tinymce({
@@ -11,14 +13,19 @@ jQuery(function($){
     // init tabs
     if ($('#adminTabs').length) {
         // init foundation tabs
+        $('.tabs-content, #adminTabs').addClass('loaded');
+        var tabs = new Foundation.Tabs($('#adminTabs'));
+
+        // keep track of selected tab
         $('[data-tabs]').on('change.zf.tabs', function (e, tab) {
-            document.location.hash = $(tab).find('>a').attr('href');
+            document.location.hash = $(tab).find('>a').attr('href').replace('panel_', '');
         });
-        var tabs = new Foundation.Tabs($('#adminTabs'), {
-            autoFocus: true
-        });
+
         if (document.location.hash != '') {
-            tabs.selectTab($(document.location.hash));
+            $('a[href="#panel_' + document.location.hash.replace('#', '') + '"]').click();
+            tabs.selectTab($('#panel_' + document.location.hash.replace('#', '')));
+        } else {
+            $('.tabs-title:first-child a').click();
         }
     }
 
