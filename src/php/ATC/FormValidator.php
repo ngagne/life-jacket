@@ -135,9 +135,9 @@ class FormValidator
     }
 
     /**
-     * Get an array of HTML formatted form validation errors
+     * Get a concatenated list of HTML formatted form validation errors
      *
-     * @return mixed
+     * @return string
      */
     public function getFormattedErrors() {
         $alertTemplate = file_get_contents(APPLICATION_PATH . '/layouts/_system/alert.html');

@@ -12,6 +12,11 @@ class Config
     protected function __construct() {}
     private function __clone() {}
 
+    /**
+     * Get a singleton instance
+     *
+     * @return Config
+     */
     public static function getInstance()
     {
         if (null === static::$instance) {
@@ -30,6 +35,12 @@ class Config
         return static::$instance;
     }
 
+    /**
+     * Magic getter
+     *
+     * @param string $name
+     * @return string
+     */
     public function __get($name) {
         if (!isset($this->settings[$name])) {
             return '';
@@ -38,6 +49,13 @@ class Config
         return $this->settings[$name];
     }
 
+    /**
+     * Get a configuration value
+     *
+     * @param string $name
+     * @param string $default
+     * @return string
+     */
     public function get($name, $default = '') {
         if (!isset($this->settings[$name])) {
             return $default;
@@ -46,6 +64,11 @@ class Config
         return $this->settings[$name];
     }
 
+    /**
+     * Update a configuration value
+     *
+     * @param $settings
+     */
     public function updateSettings($settings) {
         $this->originalContents[APPLICATION_ENV] = array_merge($this->originalContents[APPLICATION_ENV], $settings);
         $this->adapter->write($this->originalContents);

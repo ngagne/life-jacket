@@ -39,12 +39,17 @@ class Core
             }
         }
 
+        // route request
         $this->router = new Router();
+
+        // handle templates based on parsed route
         $this->stringsHandler = new StringsHandler();
         $this->view = new View($this->router, $this->stringsHandler);
 
+        // determine controller action based on parsed route
         $actionName = Utilities::formatActionName($this->router->action) . 'Action';
 
+        // load controller based on parsed route
         if (!empty($this->router->controller)) {
             if (!file_exists($this->router->controller)) {
                 throw new \Exception('Controller was not found: ' . $this->router->controller);
@@ -56,9 +61,13 @@ class Core
             $this->controller = new Controller($this->router, $this->view);
         }
 
+        // check if controller contains the requested action
         if (array_search($actionName, get_class_methods($this->controller)) === false) {
+            // set default action
             $actionName = 'indexAction';
         }
+
+        // process request through controller
         $this->controller->preProcess();
         $this->controller->$actionName();
 

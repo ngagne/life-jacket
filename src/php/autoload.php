@@ -1,10 +1,12 @@
 <?php
+// load SwiftMailer library
 $file = realpath(dirname(__FILE__) . '/../../') . '/bower_components/swiftmailer/lib/swift_required.php';
 if (!file_exists($file)) {
     die('The SwiftMailer library was not found: ' . $file);
 }
 require dirname(__FILE__) . '/../../bower_components/swiftmailer/lib/swift_required.php';
 
+// autoload ATC libraries
 spl_autoload_register(function ($class) {
 
     // project-specific namespace prefix

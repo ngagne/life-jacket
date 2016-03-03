@@ -334,6 +334,12 @@ class Controller {
         die($html);
     }
 
+    /**
+     * Sanitize form input value from user
+     *
+     * @param string $n
+     * @return string
+     */
     protected function sanitizeArray($n) {
         return htmlspecialchars($n, ENT_QUOTES, 'UTF-8');
     }

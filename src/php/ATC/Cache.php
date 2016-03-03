@@ -17,7 +17,7 @@ class Cache
     /**
      * Get singleton instance
      *
-     * @return mixed
+     * @return Cache
      */
     public static function getInstance() {
         if (null === static::$instance) {

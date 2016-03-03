@@ -8,6 +8,9 @@ class StringsHandler
     public $strings;
     protected $adapter;
 
+    /**
+     * StringsHandler constructor.
+     */
     public function __construct() {
         $config = Config::getInstance();
         $adapterClass = __NAMESPACE__ . '\ConfigAdapter\\' . Utilities::formatClassName($config->get('strings_adapter', 'ini'));
@@ -16,6 +19,9 @@ class StringsHandler
         $this->loadStrings();
     }
 
+    /**
+     * Rebuild list of tokens found in all template/layout files
+     */
     public function rebuildStrings() {
         $foundStrings = array(
             '_global' => array(),
@@ -71,6 +77,13 @@ class StringsHandler
         }
     }
 
+    /**
+     * Determine if a particular token has been modified
+     *
+     * @param string $new
+     * @param string $old
+     * @return bool
+     */
     protected function isStringsChanged($new, $old) {
         foreach ($new as $id => $tokens) {
             if (!isset($old[$id]) || array_diff(array_keys($new[$id]), array_keys($old[$id]))) {
@@ -80,14 +93,33 @@ class StringsHandler
         return false;
     }
 
+    /**
+     * Get mapped path of a layout file
+     *
+     * @param string $file
+     * @return string
+     */
     protected function mapLayoutPaths($file) {
         return APPLICATION_PATH . '/layouts/' . $file;
     }
 
+    /**
+     * Get mapped path of a partials file
+     *
+     * @param string $file
+     * @return string
+     */
     protected function mapPartialsPaths($file) {
         return APPLICATION_PATH . '/layouts/_partials/' . $file;
     }
 
+    /**
+     * Get tokens by recursively searching in template files
+     *
+     * @param $foundStrings
+     * @param string $dir
+     * @return mixed
+     */
     protected function getTemplates($foundStrings, $dir = '') {
         $path = APPLICATION_PATH . '/views/' . $dir;
         $files = array_diff(scandir($path), array('..', '.'));
@@ -122,14 +154,28 @@ class StringsHandler
         return $foundStrings;
     }
 
+    /**
+     * Save all tokens to storage
+     *
+     * @return mixed
+     */
     public function saveStrings() {
         return $this->adapter->write($this->strings);
     }
+
+    /**
+     * Update value of tokens
+     *
+     * @param array $strings
+     */
     public function setStrings($strings) {
         $this->strings = $strings;
         $this->saveStrings();
     }
 
+    /**
+     * Get tokens from storage
+     */
     protected function loadStrings() {
         $this->strings = $this->adapter->read();
     }

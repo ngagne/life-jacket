@@ -33,6 +33,8 @@ class Mailer
     }
 
     /**
+     * Sends an email from the application
+     *
      * @param string $content
      * @param string $template
      * @return int

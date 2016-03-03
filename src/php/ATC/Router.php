@@ -82,7 +82,7 @@ class Router
         foreach ($parts as $part) {
             if (file_exists($file . $part . '.php')) {
                 $this->controller = $file . $part . '.php';
-                $this->controllerClassName = $className . $this->formatClassName($part);
+                $this->controllerClassName = $className . Utilities::formatClassName($part);
                 return;
             }
 
@@ -103,13 +103,5 @@ class Router
             $this->controller = $file . 'Index.php';
             $this->controllerClassName = $className . 'Index';
         }
-    }
-
-    /**
-     * @param $value
-     * @return mixed
-     */
-    protected function formatClassName($value) {
-        return str_replace(' ', '', ucwords(str_replace('-', ' ', $value)));
     }
 }

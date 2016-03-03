@@ -9,6 +9,11 @@ class Session
     protected function __construct() {}
     private function __clone() {}
 
+    /**
+     * Get a singleton instance
+     *
+     * @return Session
+     */
     public static function getInstance()
     {
         if (null === static::$instance) {
@@ -20,6 +25,13 @@ class Session
         return static::$instance;
     }
 
+    /**
+     * Get value from session
+     *
+     * @param string $key
+     * @param string $default
+     * @return string
+     */
     public function get($key, $default = '') {
         if (!isset($_SESSION[$key])) {
             return $default;
@@ -28,6 +40,12 @@ class Session
         return $_SESSION[$key];
     }
 
+    /**
+     * Store value in session
+     *
+     * @param string $key
+     * @param string $value
+     */
     public function set($key, $value) {
         $_SESSION[$key] = $value;
     }

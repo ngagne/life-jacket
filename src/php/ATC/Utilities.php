@@ -25,7 +25,6 @@ class Utilities
      * @return string
      */
     static public function formatActionName($string) {
-
         $str = str_replace(' ', '', ucwords(str_replace('-', ' ', $string)));
         $str[0] = strtolower($str[0]);
 
