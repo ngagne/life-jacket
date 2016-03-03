@@ -1,7 +1,8 @@
-@import "admin-settings";
 @import "foundation";
+@import "admin-settings";
 @import "icons";
 @include foundation-everything;
+
 
 @mixin transition($transition...) {
     -moz-transition:    $transition;
