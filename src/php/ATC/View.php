@@ -62,17 +62,37 @@ class View
         unset($view);
 
         // process any includes
-        preg_match_all('/\[\[include=([0-9a-zA-Z_-]+)\]\]/', $this->html, $matches);
+        $this->html = $this->processIncludes($this->html);
+    }
+
+    /**
+     * Recursively find and replace include tokens with the partial HTML content
+     *
+     * @param $html
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function processIncludes($html, $path = '') {
+        preg_match_all('/\[\[include=([0-9a-zA-Z_-]+)\]\]/', $html, $matches);
         if (count($matches)) {
             foreach ($matches[1] as $i => $match) {
+                // prevent infinite loop of including the same file
+                if ($match == $path) {
+                    // simply remove token, breaking the loop
+                    $html = str_replace($matches[0][$i], '', $html);
+                    continue;
+                }
+
                 $file = APPLICATION_PATH . '/layouts/_partials/' . $match . '.html';
                 if (file_exists($file)) {
-                    $this->html = str_replace($matches[0][$i], file_get_contents($file), $this->html);
+                    $html = str_replace($matches[0][$i], $this->processIncludes(file_get_contents($file), $match), $html);
                 } else {
                     throw new \Exception('Include was not found: ' . $file);
                 }
             }
         }
+
+        return $html;
     }
 
     /**
