@@ -1,10 +1,16 @@
 <?php
+// define path to public directory
+defined('PUBLIC_PATH') || define('PUBLIC_PATH', realpath(dirname(__FILE__) . '/../../public/'));
+
+// define path to application directory
+defined('APPLICATION_PATH') || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../../' . 'app'));
+
 // load SwiftMailer library
-$file = realpath(dirname(__FILE__) . '/../../') . '/bower_components/swiftmailer/lib/swift_required.php';
+$file = realpath(APPLICATION_PATH . '/../') . '/bower_components/swiftmailer/lib/swift_required.php';
 if (!file_exists($file)) {
     die('The SwiftMailer library was not found: ' . $file);
 }
-require dirname(__FILE__) . '/../../bower_components/swiftmailer/lib/swift_required.php';
+require $file;
 
 // autoload ATC libraries
 spl_autoload_register(function ($class) {

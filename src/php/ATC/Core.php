@@ -40,7 +40,8 @@ class Core
         }
 
         // route request
-        $this->router = new Router();
+        $this->router = new Router($_SERVER['REQUEST_URI']);
+
 
         // handle templates based on parsed route
         $this->stringsHandler = new StringsHandler();

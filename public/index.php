@@ -1,10 +1,4 @@
 <?php
-// define path to public directory
-defined('PUBLIC_PATH') || define('PUBLIC_PATH', realpath(dirname(__FILE__)));
-
-// define path to application directory
-defined('APPLICATION_PATH') || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../' . 'app'));
-
 // define application environment
 defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
@@ -15,7 +9,7 @@ if (APPLICATION_ENV == 'development') {
 }
 
 // autoload libraries
-require APPLICATION_PATH . '/../src/php/autoload.php';
+require dirname(__FILE__) . '/../src/php/autoload.php';
 
 // initialize application
 try {
