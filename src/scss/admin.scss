@@ -80,7 +80,7 @@ body{
 	background: $primary-color;
 	padding: 0px;
     padding-top: 15px;
-    min-height:100vh;
+    height:100vh;
     padding-top: 65px;
 }
 #adminTabs{
@@ -137,7 +137,8 @@ body{
 	}
 .content{
     padding-top: 65px;
-    min-height:100vh;
+    height: 100vh;
+    overflow-y: scroll;
     .tabs-panel{
         padding:0px;
     }

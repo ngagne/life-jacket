@@ -2,18 +2,13 @@
 
 namespace ATC;
 
+
 class View
 {
     protected $html;
     protected $router;
     protected $stringsHandler;
 
-    /**
-     * View constructor.
-     *
-     * @param Router $router
-     * @param StringsHandler $stringsHandler
-     */
     public function __construct(\ATC\Router $router, \ATC\StringsHandler $stringsHandler) {
         $this->router = $router;
         $this->stringsHandler = $stringsHandler;
@@ -21,21 +16,11 @@ class View
         $this->process();
     }
 
-    /**
-     * Load template files and process tokens
-     *
-     * @throws \Exception
-     */
     protected function process() {
         $this->loadTemplateFiles();
         $this->processTokens();
     }
 
-    /**
-     * Load template files based on parsed route
-     *
-     * @throws \Exception
-     */
     protected function loadTemplateFiles() {
         // get view
         if ($this->router->template == '' || !file_exists($this->router->template)) {
@@ -62,42 +47,19 @@ class View
         unset($view);
 
         // process any includes
-        $this->html = $this->processIncludes($this->html);
-    }
-
-    /**
-     * Recursively find and replace include tokens with the partial HTML content
-     *
-     * @param $html
-     * @return mixed
-     * @throws \Exception
-     */
-    protected function processIncludes($html, $path = '') {
-        preg_match_all('/\[\[include=([0-9a-zA-Z_-]+)\]\]/', $html, $matches);
+        preg_match_all('/\[\[include=([0-9a-zA-Z_-]+)\]\]/', $this->html, $matches);
         if (count($matches)) {
             foreach ($matches[1] as $i => $match) {
-                // prevent infinite loop of including the same file
-                if ($match == $path) {
-                    // simply remove token, breaking the loop
-                    $html = str_replace($matches[0][$i], '', $html);
-                    continue;
-                }
-
                 $file = APPLICATION_PATH . '/layouts/_partials/' . $match . '.html';
                 if (file_exists($file)) {
-                    $html = str_replace($matches[0][$i], $this->processIncludes(file_get_contents($file), $match), $html);
+                    $this->html = str_replace($matches[0][$i], file_get_contents($file), $this->html);
                 } else {
                     throw new \Exception('Include was not found: ' . $file);
                 }
             }
         }
-
-        return $html;
     }
 
-    /**
-     * Process tokens found within templates
-     */
     protected function processTokens() {
         $config = Config::getInstance();
 
@@ -128,11 +90,6 @@ class View
         }
     }
 
-    /**
-     * Parse form fields from templates
-     *
-     * @return array
-     */
     public function getFormFields() {
         $fields = array();
         preg_match_all('/(<input[^<]+>)|(<textarea[^<]+>.*?<\/textarea>)|(<select[^<]+>)/s', $this->html, $inputs);
@@ -150,11 +107,6 @@ class View
         return $fields;
     }
 
-    /**
-     * Reformat name of form fields
-     *
-     * @param string $n
-     */
     protected function cleanupFormFields(&$n) {
         $n = trim($n, ' "\'');
         if (strpos($n, 'form[') === 0) {
@@ -162,23 +114,10 @@ class View
         }
     }
 
-    /**
-     * Replace token with value in HTML
-     *
-     * @param string $token
-     * @param string $value
-     */
     public function replaceToken($token, $value) {
         $this->html = str_replace('[[' . $token . ']]', $value, $this->html);
     }
 
-    /**
-     * Get the value of a token and replace that token in the HTML
-     *
-     * @param string $token
-     * @param string $replacement
-     * @return string
-     */
     public function getTokenValue($token, $replacement = '') {
         preg_match('/\[\[' . $token . '=([^\]]+)\]\]/', $this->html, $matches);
 
@@ -190,11 +129,6 @@ class View
         return '';
     }
 
-    /**
-     * Get final rendered HTML, ready for output to the browser
-     *
-     * @return mixed
-     */
     public function render() {
         // replace escaped brackets
         $this->html = str_replace(array('\[', '\]'), array('[', ']'), $this->html);

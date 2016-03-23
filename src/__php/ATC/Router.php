@@ -20,8 +20,8 @@ class Router
     /**
      * Router constructor.
      */
-    public function __construct($requestURI) {
-        $this->parseRequest($requestURI);
+    public function __construct() {
+        $this->parseRequest();
         $this->findTemplate();
         $this->findController();
     }
@@ -39,34 +39,33 @@ class Router
 
     /**
      * Parse requested URL
-     *
-     * @param string $requestURI
      */
-    protected function parseRequest($requestURI) {
-        $this->reqURI = $requestURI;
-        $this->uri = parse_url($this->reqURI);
+    protected function parseRequest() {
+        $this->reqURI = $_SERVER['REQUEST_URI'];
+        $this->uri = parse_url($_SERVER['REQUEST_URI']);
 
         $this->path = explode('/', trim($this->uri['path'], '/'));
 
-        // get action based on last element of the path
-        $lastPart = end($this->path);
-        $this->action = $lastPart != '' ? $lastPart : 'index';
-        reset($this->path);
+        if (count($this->path) == 1) {
+            $this->action = $this->path[0] != '' ? $this->path[0] : 'index';
+        } else {
+            $this->action = $this->path[1] != '' ? $this->path[1] : 'index';
+        }
     }
 
     /**
      * Find a template file based on the parsed request path
      */
     protected function findTemplate() {
-        $dir = APPLICATION_PATH . '/views/';
+        $file = APPLICATION_PATH . '/views/';
 
         if (implode('/', $this->path) == 'admin-logout') {
-            $this->template = $dir . 'index.html';
-        } else if (file_exists($dir . implode('/', $this->path) . '/index.html')) {
-            $this->template = rtrim($dir . implode('/', $this->path), '/') . '/index.html';
+            $this->template = $file . '/index.html';
+        } else if (file_exists($file . implode('/', $this->path) . '/index.html')) {
+            $this->template = $file . implode('/', $this->path) . '/index.html';
             $this->tokenGroup = trim(implode('/', $this->path) . '/index', '/');
-        } else if (file_exists($dir . implode('/', $this->path) . '.html')) {
-            $this->template = $dir . implode('/', $this->path) . '.html';
+        } else if (file_exists($file . implode('/', $this->path) . '.html')) {
+            $this->template = $file . implode('/', $this->path) . '.html';
             $this->tokenGroup = implode('/', $this->path);
         }
     }
@@ -79,30 +78,38 @@ class Router
         $className = '\\Controllers\\';
         array_pop($parts);
 
-        $dir = APPLICATION_PATH . '/controllers/';
+        $file = APPLICATION_PATH . '/controllers/';
         foreach ($parts as $part) {
-            if (file_exists($dir . $part . '.php')) {
-                $this->controller = $dir . $part . '.php';
-                $this->controllerClassName = $className . Utilities::formatClassName($part);
+            if (file_exists($file . $part . '.php')) {
+                $this->controller = $file . $part . '.php';
+                $this->controllerClassName = $className . $this->formatClassName($part);
                 return;
             }
 
-            if (!is_dir($dir . $part . '/')) {
+            if (!is_dir($file . $part . '/')) {
                 break;
             }
 
-            $dir .= $part . '/';
+            $file .= $part . '/';
 
-            if (file_exists($dir . 'Index.php')) {
-                $this->controller = $dir . 'Index.php';
+            if (file_exists($file . 'Index.php')) {
+                $this->controller = $file . 'Index.php';
                 $this->controllerClassName = $className . 'Index';
                 return;
             }
         }
 
-        if (file_exists($dir . 'Index.php')) {
-            $this->controller = $dir . 'Index.php';
+        if (file_exists($file . 'Index.php')) {
+            $this->controller = $file . 'Index.php';
             $this->controllerClassName = $className . 'Index';
         }
+    }
+
+    /**
+     * @param $value
+     * @return mixed
+     */
+    protected function formatClassName($value) {
+        return str_replace(' ', '', ucwords(str_replace('-', ' ', $value)));
     }
 }

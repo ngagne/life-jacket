@@ -1,0 +1,64 @@
+// prefix declarations
+@mixin full-support ( $prop, $value ) {
+  $vendors: null;
+  $b_w: '-webkit-';
+  $b_wo: '-webkit-', '-o-';
+  $b_mwo: '-moz-', '-webkit-', '-o-';
+  $b_wi: '-webkit-', '-ms-';
+
+  @if $prop == 'animation' { $vendors: $b_wi; }
+  @if $prop == 'box-shadow' { $vendors: $b_w; }
+  @if $prop == 'transition' { $vendors: $b_wo; }
+  @if $prop == 'transform' { $vendors: $b_wi; }
+
+  @each $vendor in $vendors {
+    #{$vendor}#{$prop}: $value;
+  }
+  #{$prop} : $value;
+}
+
+@mixin v-center($position){
+    position: $position;
+    top: 50%;
+    @include full-support(transform, translate(0%, -50%));
+}
+@mixin center(){
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    @include full-support(transform, translate(-50%, -50%));
+}
+
+@mixin prefixed($property, $value) {
+  @if $webkit == true {
+    -webkit-#{$property}: #{$value};
+  }
+
+  @if $moz == true {
+    -moz-#{$property}: #{$value};
+  }
+
+  @if $ms == true {
+    -ms-#{$property}: #{$value};
+  }
+
+  @if $o == true {
+    -o-#{$property}: #{$value};
+  }
+
+  #{$property}: #{$value};
+}
+
+@mixin transition-delay($delay...) {
+    -moz-transition-delay:    $delay;
+    -o-transition-delay:      $delay;
+    -webkit-transition-delay: $delay;
+    transition-delay:         $delay;
+}
+@mixin transition ($prop: all, $time: 1s, $ease: linear) {
+	-webkit-transition: $prop $time $ease;
+	-moz-transition: $prop $time $ease;
+	-o-transition: $prop $time $ease;
+	-ms-transition: $prop $time $ease;
+	transition: $prop $time $ease;
+}

@@ -1,6 +1,203 @@
-@import "settings";
+@import "site-settings";
 @import "foundation";
 @include foundation-everything;
 
+
 /* Extend these rules with your own SASS files below */
 @import "default/common";
+@import "default/icons";
+@import "default/mixins";
+
+//global styles
+.row.full-width{
+    max-width: 100%;
+    img{
+        width: 100%;
+    }
+}
+.off-canvas-wrapper{
+    background: $primary-color;
+}
+
+//home styles
+.slick-slider{
+    opacity: 0;
+    @include transition(opacity, 1s, ease);
+    margin:0px;
+    overflow:hidden;
+    &:hover{
+        .slick-next, .slick-prev{
+            opacity: 1;
+        }
+    }
+    &.slick-initialized{
+        opacity:1;
+    }
+    .slick-slide{
+        max-height: 560px;
+    }
+    .slick-next, .slick-prev{
+        height: 200px;
+        width: 200px;
+        z-index: 10;
+        @include transition(all, 500ms, ease);
+        opacity: 0;
+        &:before{
+            content: '\e900';
+            font-size: 200px;
+            @extend [class^="icon-"];
+            @include breakpoint(medium down){
+                font-size: 80px;
+            }
+        }
+    }
+    .slick-next{
+        right: -65px;
+        &:before{
+            content: '\e901';
+        }
+    }
+    
+    .slick-prev{
+        left: -65px;
+        &:before{
+            content: '\e900';
+        }
+    }
+}
+.home-boxes{
+    background:#e5e5e5;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    .column, .column:last-child:not(:first-child){
+         @include breakpoint(medium down){
+            max-width: 340px;
+            margin: 0 auto 20px;
+            float: none;
+        }
+    }
+    .row{
+        max-width: 1100px;
+    }
+    .home-box{
+       background:#fff;
+       text-align: center;
+       padding-bottom: 15px;
+       display: block;
+       h2{
+           font-weight: 300;
+       }
+       h2,p{
+           padding: 0 15px;
+       }
+       img{
+           margin-bottom: 15px;
+       }
+
+    }
+}
+
+
+
+//header styles
+.utility{
+    background: $light-gray;
+    a{
+        float:right;
+    }
+}
+header{
+    .logo{
+        float:left;
+    }
+    ul.menu{
+        float:right;
+        margin:0px;
+        li{
+            height: 60px;
+            @include transition(all, 300ms, ease);
+            &:hover{
+                background: $light-gray;
+            }
+        }
+    }
+    .phone-number{
+        color:#6d6e71;
+        font-size: rem-calc(14);
+        i{
+            margin-right: 10px;
+        }
+    }
+    .menu-toggle{
+        float:right;
+        height: 60px;
+        width: 30px;
+        position: relative;
+        i{
+            font-size: 30px;
+            @include v-center(absolute);
+            &:after{
+                color:$body-font-color;
+            }
+        }
+    }
+}
+.off-canvas{
+    .icon-close-circle{
+        color:#fff;
+        font-size: rem-calc(22);
+    }
+    & > .menu{
+        margin: 30px 0 0 0;
+    }
+    li{
+        &.is-accordion-submenu-parent{
+            & a:after{
+                border-color:#efefef transparent transparent;
+            }
+        }
+        a{
+            color:#fff;
+        }
+    }
+}
+
+//footer styles
+footer{
+    background:$primary-color;
+    padding: 10px 0;
+    .copyright{
+        @include breakpoint(medium down){
+            text-align: center;
+        }
+        p{
+            font-size:14px;
+            color:#fff;
+            margin: 0px;
+        }
+    }
+    
+    .footer-menu{
+        text-align: right;
+        @include breakpoint(medium down){
+            text-align: center;
+            padding: 10px 0 0;
+        }
+    }
+    .menu{
+        display: inline-block;
+        li{
+            display: inline-block;
+            a{
+                color: #fff;
+                font-size: 14px;
+                padding: 0 1rem;
+                @include breakpoint(330 down){
+                        padding: 0 .5rem;
+                }
+            }
+        }
+        
+    }
+
+}

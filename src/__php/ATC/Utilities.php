@@ -15,7 +15,7 @@ class Utilities
      * @return string
      */
     static public function formatClassName($value) {
-        return str_replace(' ', '', ucwords(str_replace('-', ' ', strtolower($value))));
+        return str_replace(' ', '', ucwords(str_replace('-', ' ', $value)));
     }
 
     /**
@@ -25,7 +25,8 @@ class Utilities
      * @return string
      */
     static public function formatActionName($string) {
-        $str = str_replace(' ', '', ucwords(str_replace('-', ' ', strtolower($string))));
+
+        $str = str_replace(' ', '', ucwords(str_replace('-', ' ', $string)));
         $str[0] = strtolower($str[0]);
 
         return $str;
