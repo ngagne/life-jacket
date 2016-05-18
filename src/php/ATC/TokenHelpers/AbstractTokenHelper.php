@@ -47,6 +47,36 @@ class AbstractTokenHelper
     }
 
     /**
+     * Process html array (used for repeaters)
+     *
+     * @param array $html
+     * @return string
+     */
+    public function processRegion(Array $html) {
+        return implode("\n", $html);
+    }
+
+    /**
+     * Process instance of HTML input sub-fields (used for repeaters)
+     *
+     * @param array $html
+     * @return string
+     */
+    public function processFields(Array $html) {
+        return implode("\n", $html);
+    }
+
+    /**
+     * Process group of HTML input sub-fields (used for repeaters)
+     *
+     * @param array $html
+     * @return string
+     */
+    public function processFieldGroup(Array $html) {
+        return implode("\n", $html);
+    }
+
+    /**
      * Render admin form input field
      *
      * @param string $file

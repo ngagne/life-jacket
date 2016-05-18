@@ -64,7 +64,12 @@ class StringsHandler
                 $strings = array();
 
                 foreach ($tokens as $token => $value) {
-                    $strings[$token] = isset($this->strings[$pageID]) && !empty($this->strings[$pageID][$token]) ? $this->strings[$pageID][$token] : '';
+                    $default = '';
+                    if (is_array($value) && !is_array($this->strings[$pageID][$token])) {
+                        $strings[$token] = $value;
+                    } else {
+                        $strings[$token] = isset($this->strings[$pageID]) && !empty($this->strings[$pageID][$token]) ? $this->strings[$pageID][$token] : '';
+                    }
                 }
 
                 $newStrings[$pageID] = $strings;
@@ -86,6 +91,12 @@ class StringsHandler
      */
     protected function isStringsChanged($new, $old) {
         foreach ($new as $id => $tokens) {
+            foreach ($tokens as $token => $value) {
+                if (is_array($value) && (!isset($old[$id][$token]) || !is_array($old[$id][$token]) || array_keys($value) != array_keys($old[$id][$token]))) {
+                    return true;
+                }
+            }
+
             if (!isset($old[$id]) || array_diff(array_keys($new[$id]), array_keys($old[$id]))) {
                 return true;
             }
@@ -142,12 +153,49 @@ class StringsHandler
 
             // parse page specific
             $pageID = $dir . str_replace('.html', '', $file);
-            preg_match_all('@\[\[([0-9a-zA-Z][/0-9a-zA-Z_-]*)\]\]@', $html, $matches);
+            preg_match_all('@\[\[(/?[0-9a-zA-Z][/0-9a-zA-Z_-]*)\]\]@', $html, $matches);
+
             if (!empty($matches[1])) {
                 if (!isset($foundStrings[$pageID])) {
                     $foundStrings[$pageID] = array();
                 }
                 $foundStrings[$pageID] = array_merge($foundStrings[$pageID], array_fill_keys($matches[1], ''));
+
+                // handle repeaters
+                $keys = array_keys($foundStrings[$pageID]);
+                foreach ($keys as $key) {
+                    // is token a closing repeater?
+                    if (strpos($key, '/') === 0) {
+                        $children = array();
+                        $target = ltrim($key, '/');
+                        $reversedKeys = array_reverse($keys);
+
+                        // remove from list
+                        unset($foundStrings[$pageID][$key]);
+
+                        // search for matching opening token
+                        $isPastClosing = false;
+                        foreach ($reversedKeys as $reversedKey) {
+                            // skip tokens that aren't within the region of the repeater
+                            if (!$isPastClosing) {
+                                if ($reversedKey == $key) {
+                                    $isPastClosing = true;
+                                }
+                                continue;
+                            }
+
+                            // check if this is the opening token
+                            if ($target == $reversedKey) {
+                                $foundStrings[$pageID][$reversedKey] = array_fill_keys($children, '');
+                                break;
+                            }
+
+                            // this token is within the repeater region, add it to the list of children
+                            $children[] = $reversedKey;
+                            unset($foundStrings[$pageID][$reversedKey]);
+                        }
+                    }
+                }
             }
         }
 

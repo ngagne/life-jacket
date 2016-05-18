@@ -15,7 +15,41 @@ class Ini implements AdapterInterface
             throw new \Exception('INI file was not found: ' . $this->file);
         }
 
-        return parse_ini_file($this->file, true);
+        $data = parse_ini_file($this->file, true);
+
+        // handle nested elements
+        foreach ($data as $pageID => $items) {
+            foreach ($items as $key => $item) {
+                if (strpos($key, '//') !== false) {
+                    list($parentKey, $subKey) = explode('//', $key);
+
+                    if (!isset($data[$pageID][$parentKey])) {
+                        $data[$pageID][$parentKey] = array();
+                    }
+
+                    $data[$pageID][$parentKey][$subKey] = $item;
+
+                    unset($data[$pageID][$key]);
+                }
+            }
+        }
+
+        // rearrange nested elements
+        foreach ($data as $pageID => $items) {
+            foreach ($items as $key => $item) {
+                if (is_array($item)) {
+                    $organizedData = array();
+                    foreach ($item as $subKey => $subItems) {
+                        foreach ($subItems as $i => $subItem) {
+                            $organizedData[$i][$subKey] = $subItem;
+                        }
+                    }
+                    $data[$pageID][$key] = $organizedData;
+                }
+            }
+        }
+
+        return $data;
     }
 
     public function write(Array $data) {
@@ -25,15 +59,32 @@ class Ini implements AdapterInterface
             if (is_array($val)) {
                 $lines[] = "[$key]";
                 foreach ($val as $skey => $sval) {
-                    $lines[] = "$skey = ".(is_numeric($sval) ? $sval : '"'.$sval.'"');
+                    $lines = $this->writeLine($lines, $skey, $sval);
                 }
                 $lines[] = "";
             } else {
-                $lines[] = "$key = ".(is_numeric($val) ? $val : '"'.$val.'"');
+                $lines = $this->writeLine($lines, $key, $val);
             }
         }
 
         // save data to file
         file_put_contents($this->file, implode("\n", $lines));
+    }
+
+    protected function writeLine($lines, $key, $value) {
+        if (is_array($value)) {
+            foreach ($value as $values) {
+                foreach ($values as $subKey => $subVal) {
+                    $lines[] = $key . '//' . $subKey . '[] = ' . '"' . $subVal . '"';
+                }
+            }
+        } else {
+            if (!is_numeric($value)) {
+                $value = '"' . $value . '"';
+            }
+            $lines[] = "$key = " . $value;
+        }
+
+        return $lines;
     }
 }

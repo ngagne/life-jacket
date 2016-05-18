@@ -231,42 +231,68 @@ class Controller {
         $rowTemplate = $templates['row'];
 
         $html = array();
-        foreach ($data as $group => $items) {
+        foreach ($data as $groupID => $items) {
             if (!count($items)) {
                 continue;
             }
 
-            $rows = array();
-            foreach ($items as $key => $value) {
-                // detect special suffixes
-                $suffix = $fieldGroup == '' ? 'textarea' : 'text';
-                $suffixOffset = strpos($key, '/');
-                if ($suffixOffset !== false) {
-                    $suffix = substr($key, $suffixOffset + 1);
-                }
-
-                // format values
-                $name = $fieldGroup == '' ? "data[$group][$key]" : "{$fieldGroup}[$key]";
-                $label = ucwords(preg_replace('/\/.+/', '', str_replace(array('-', '_'), ' ', $key)));
-
-                // determine helper class to use for rendering form field
-                $helperClass = __NAMESPACE__ . '\TokenHelpers\\' . Utilities::formatClassName($suffix);
-                $helper = new $helperClass($value, $name, $label);
-
-                // add field to row
-                $rows[] = str_replace('[[__content]]', $helper->getField(), $rowTemplate);
-            }
+            $rows = $this->renderFields($items, array($groupID), $rowTemplate, $fieldGroup);
 
             $tokens = array(
-                '[[__id]]' => str_replace('/', '-', str_replace('-', '--', $group)),
+                '[[__id]]' => str_replace('/', '-', str_replace('-', '--', $groupID)),
                 '[[__rows]]' => implode("\n", $rows),
-                '[[__legend]]' => $group,
+                '[[__legend]]' => $groupID,
             );
 
             $html[] = str_replace(array_keys($tokens), $tokens, $fieldsetTemplate);
         }
 
         return $html;
+    }
+
+    /**
+     * Render fields for a specific section
+     *
+     * @param array $items
+     * @param array $groups
+     * @param string $rowTemplate
+     * @param string $fieldGroup
+     * @return array
+     */
+    protected function renderFields(Array $items, Array $groups, $rowTemplate, $fieldGroup = '') {
+        $rows = array();
+        foreach ($items as $key => $value) {
+            // detect special suffixes
+            $suffix = $fieldGroup == '' ? 'textarea' : 'text';
+            $suffixOffset = strpos($key, '/');
+            if ($suffixOffset !== false) {
+                $suffix = substr($key, $suffixOffset + 1);
+            }
+
+            // format values
+            $name = $fieldGroup == '' ? sprintf('data[%s][%s]', implode('][', $groups), $key) : "{$fieldGroup}[$key]";
+            $label = ucwords(preg_replace('/\/.+/', '', str_replace(array('-', '_'), ' ', $key)));
+
+            // determine helper class to use for rendering form field
+            $helperClass = __NAMESPACE__ . '\TokenHelpers\\' . Utilities::formatClassName($suffix);
+            $helper = new $helperClass($value, $name, $label);
+
+            // add field to row
+            if (!is_array($value)) {
+                $rows[] = str_replace('[[__content]]', $helper->getField(), $rowTemplate);
+            } else {
+                // iterate through and process tokens each item
+                $subFieldGroups = array();
+                foreach ($value as $subStrings) {
+                    $subFields = $this->renderFields($subStrings, array_merge($groups, array($key)), $rowTemplate, $fieldGroup);
+                    $subFieldGroup[] = $helper->processFields($subFields);
+                }
+
+                $rows[] = $helper->processFieldGroup($subFieldGroup);
+            }
+        }
+
+        return $rows;
     }
 
     /**
