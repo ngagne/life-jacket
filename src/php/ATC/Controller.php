@@ -145,6 +145,12 @@ class Controller {
                 '[[__name]]' => $key,
                 '[[__id]]' => str_replace('/', '-', str_replace('-', '--', $key)),
             );
+
+            // Make sure there are items in this section to show. If not, do not render a nav item
+            if (count($strings[$key]) == 0) {
+                continue;
+            }
+
             $html['nav_items'][] = str_replace(array_keys($tokens), $tokens, $templates['navItem']);
         }
 

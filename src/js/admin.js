@@ -22,8 +22,14 @@ jQuery(function($){
         });
 
         if (document.location.hash != '') {
-            $('a[href="#panel_' + document.location.hash.replace('#', '') + '"]').click();
-            tabs.selectTab($('#panel_' + document.location.hash.replace('#', '')));
+            var anchor = $('a[href="#panel_' + document.location.hash.replace('#', '') + '"]');
+            if (anchor.length){
+                anchor.click();
+                tabs.selectTab($('#panel_' + document.location.hash.replace('#', '')));
+            } else {
+                $('.tabs-title:first-child a').click();
+            }
+
         } else {
             $('.tabs-title:first-child a').click();
         }
