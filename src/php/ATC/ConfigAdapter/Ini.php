@@ -25,10 +25,12 @@ class Ini implements AdapterInterface
             if (is_array($val)) {
                 $lines[] = "[$key]";
                 foreach ($val as $skey => $sval) {
+                    $sval = addslashes($sval);
                     $lines[] = "$skey = ".(is_numeric($sval) ? $sval : '"'.$sval.'"');
                 }
                 $lines[] = "";
             } else {
+                $val = addslashes($val);
                 $lines[] = "$key = ".(is_numeric($val) ? $val : '"'.$val.'"');
             }
         }
