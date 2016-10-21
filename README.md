@@ -70,6 +70,11 @@ Tokens helpers have a specific suffix in the format of `[[.../suffix]]` and allo
   * `[[.../img]]` creates an image URL which can be edited through the admin area. A unique string should be used before the `|img` suffix just as you would with a standard token.
   * `[[.../html]]` displays a WYSIWYG editor in the admin area for input of basic HTML elements: `<p> <br> <a> <em> <strong>`.
   * `[[.../youtube]]` extracts the YouTube video ID from an embed code or url.
+  
+#### Repeaters
+Repeaters are a special set of tokens which define the start and end of a region of repeating content (e.g. a series of images for a slider). Repeaters should contain at least one token within the region. In the admin interface this will display as a series of form fields which can be added to and removed from.
+  * `[[.../repeater]]` defines the *start* of a region of repeating content.
+  * `[[/.../repeater]]` defines the *end* of a region of repeating content (note the leading forward slash).
 
 #### Custom Token Helpers
 New token helpers can be added by creating a new PHP class file in `/vendor/ATC/TokenHelpers/` which extends the `\ATC\TokenHelpers\Text` base class (`/vendor/ATC/TokenHelpers/Text.php`). You can review the `\ATC\TokenHelpers\Img` class to see a good example of how to extend token functionality.

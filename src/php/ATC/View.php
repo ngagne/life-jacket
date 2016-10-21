@@ -28,7 +28,7 @@ class View
      */
     protected function process() {
         $this->loadTemplateFiles();
-        $this->processTokens();
+        $this->html = $this->processTokens($this->router->tokenGroup, $this->stringsHandler->strings, $this->html);
     }
 
     /**
@@ -97,20 +97,23 @@ class View
 
     /**
      * Process tokens found within templates
+     *
+     * @param string $tokenGroup
+     * @param array $strings
+     * @param string $html
+     * @return string
      */
-    protected function processTokens() {
-        $config = Config::getInstance();
-
+    protected function processTokens($tokenGroup, $strings, $html) {
         // process any global tokens
-        if (!empty($this->stringsHandler->strings['_global'])) {
-            foreach ($this->stringsHandler->strings['_global'] as $token => $string) {
-                $this->html = str_replace('[[' . $token . ']]', $string, $this->html);
+        if (!empty($strings['_global'])) {
+            foreach ($strings['_global'] as $token => $value) {
+                $html = str_replace('[[' . $token . ']]', $value, $html);
             }
         }
 
         // process any action specific tokens
-        if (isset($this->stringsHandler->strings[$this->router->tokenGroup])) {
-            foreach ($this->stringsHandler->strings[$this->router->tokenGroup] as $token => $string) {
+        if (isset($strings[$tokenGroup])) {
+            foreach ($strings[$tokenGroup] as $token => $value) {
                 // detect special suffixes
                 $suffix = 'textarea';
                 $suffixOffset = strpos($token, '/');
@@ -120,12 +123,49 @@ class View
 
                 // determine helper class to use for rendering token's string
                 $helperClass = __NAMESPACE__ . '\TokenHelpers\\' . Utilities::formatClassName($suffix);
-                $helper = new $helperClass($string, $token);
+
+                $helper = new $helperClass($value, $token);
 
                 // replace token with string in HTML
-                $this->html = str_replace('[[' . $token . ']]', $helper->getString(), $this->html);
+                if (!is_array($value)) {
+                    $html = str_replace('[[' . $token . ']]', $helper->getString(), $html);
+                } else {
+                    // get html slice within repeater region
+                    if (!preg_match('@\[\[' . $token . '\]\](.*?)\[\[/' . $token . '\]\]@mis', $html, $match)) {
+                        continue;
+                    }
+                    $htmlSlice = $match[1];
+
+                    // restructure array
+                    $subValues = array();
+                    foreach ($value as $subStringKey => $subStringValues) {
+                        $i = 0;
+                        foreach ($subStringValues as $subStringValue) {
+                            if (!isset($subValues[$i])) {
+                                $subValues[$i] = array();
+                            }
+                            $subValues[$i][$subStringKey] = $subStringValue;
+
+                            ++$i;
+                        }
+                    }
+
+                    // iterate through and process tokens each item
+                    $output = array();
+                    foreach ($subValues as $subStrings) {
+                        $output[] = $this->processTokens(0, array($subStrings), $htmlSlice);
+                    }
+
+                    // process item results with repeater token helper
+                    $htmlSlice = $helper->processRegion($output);
+
+                    // replace original html region slice with new content
+                    $html = preg_replace('@\[\[' . $token . '\]\].*?\[\[/' . $token . '\]\]@mis', $htmlSlice, $html);
+                }
             }
         }
+
+        return $html;
     }
 
     /**

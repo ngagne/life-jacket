@@ -22,28 +22,60 @@ jQuery(function($){
         });
 
         if (document.location.hash != '') {
-            var anchor = $('a[href="#panel_' + document.location.hash.replace('#', '') + '"]');
-            if (anchor.length){
-                anchor.click();
-                tabs.selectTab($('#panel_' + document.location.hash.replace('#', '')));
-            } else {
-                $('.tabs-title:first-child a').click();
-            }
-
+            $('a[href="#panel_' + document.location.hash.replace('#', '') + '"]').click();
+            tabs.selectTab($('#panel_' + document.location.hash.replace('#', '')));
         } else {
             $('.tabs-title:first-child a').click();
         }
     }
 
     // init YouTube input types
-    if ($('.input-youtube').length) {
-        $('.input-youtube').on('change.atc', function(){
+    var $inputYoutube = $('.input-youtube');
+    if ($inputYoutube.length) {
+        $inputYoutube.on('change.atc', function(){
             var regExp = /^.*(?:(?:youtu.be\/)|(?:v\/)|(?:\/u\/\w\/)|(?:embed\/)|(?:watch\?))\??v?=?([^#\&\?"]*).*/;
             var match = $(this).val().match(regExp);
 
             if (match) {
                 $(this).val(match[1]);
             }
+        });
+    }
+
+    // init repeater field groups
+    var $fieldRepeaters = $('.field-repeater');
+    if ($fieldRepeaters.length) {
+        $fieldRepeaters.each(function() {
+            var resetRepeaterRemoveButtons = function() {
+                // remove existing "remove" buttons
+                $('.field-repeater-remove', $group).remove();
+
+                // add new "remove" buttons to all except the first items
+                var $btnRemove = $('<button/>').addClass('field-repeater-remove alert button').html('&times; Remove').click(btnRemoveClick);
+                $('>', $group).not($firstItem).append($btnRemove);
+            };
+
+            var btnRemoveClick = function(e){
+                e.preventDefault();
+                $(this).parent().remove();
+            };
+
+            var btnAddClick = function(e){
+                e.preventDefault();
+
+                var field = $firstItem.clone();
+                field.find('input, select, textarea').val('');
+                field.appendTo($group);
+
+                resetRepeaterRemoveButtons();
+            };
+
+            var $group = $('.field-group-container', this),
+                $firstItem = $('> :first-child', $group),
+                $btnAdd = $('.field-repeater-add', this);
+
+            $btnAdd.click(btnAddClick);
+            resetRepeaterRemoveButtons();
         });
     }
 });

@@ -84,86 +84,118 @@ body{
     padding-top: 65px;
 }
 #adminTabs{
-		background: none;
-		border: none;
-        @extend .animate-in;
-		li{
-            outline: none;
-			&.is-active{
-				a{
-                    background: #198990;
-                    color:#fff;
-                    border-left: 5px solid #F26822;
+    background: none;
+    border: none;
+    @extend .animate-in;
+    li{
+        outline: none;
+        &.is-active{
+            a{
+                background: #198990;
+                color:#fff;
+                border-left: 5px solid #F26822;
 
-                    &:hover{
-                        background: #198990;
-                    }
-                    &:focus, &[aria-selected='true']{
-                        background: #198990;
-                    }
-				}
-			}
-			a{
-				color:#d8d8d8;
-                outline: none;
-				font-size: 14px;
-				font-weight: 600;
-				text-transform: uppercase;
-                transition: all, 300ms ease;
-                padding: 12px 20px;
-                &:focus, &[aria-selected='true']{
-                    background: none;
-                }
                 &:hover{
-                    background:#2DADB5;
-                    color:#fff;
+                    background: #198990;
                 }
-                &:before{
-                    transition: all, 300ms ease;
-                    content: "\e900";
-                    @extend [class^="icon-"];
-                    margin-right: 10px;
-                    color:#fff;
-                    font-size: 16px;
+                &:focus, &[aria-selected='true']{
+                    background: #198990;
                 }
-                &#panel_settings-label:before{
-                    content: "\e902";
-                }
-                &#panel__global-label:before{
-                    content: "\e901";
-                }
-			}
-		}
-	}
+            }
+        }
+        a{
+            color:#d8d8d8;
+            outline: none;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: all, 300ms ease;
+            padding: 12px 20px;
+            &:focus, &[aria-selected='true']{
+                background: none;
+            }
+            &:hover{
+                background:#2DADB5;
+                color:#fff;
+            }
+            &:before{
+                transition: all, 300ms ease;
+                content: "\e900";
+                @extend [class^="icon-"];
+                margin-right: 10px;
+                color:#fff;
+                font-size: 16px;
+            }
+            &#panel_settings-label:before{
+                content: "\e902";
+            }
+            &#panel__global-label:before{
+                content: "\e901";
+            }
+        }
+    }
+}
 .content{
     padding-top: 65px;
     height: 100vh;
     overflow-y: scroll;
     .tabs-panel{
-        padding:0px;
+        padding:0;
     }
-     .tabs-content.vertical{
+    .tabs-content.vertical{
         background:none;
         border:none;
-        
-         @extend .animate-in;
-         @include transition(all, 500ms 300ms, ease);
-       
-    }
-     fieldset{
-         background:#fff;
-         border:1px solid #dfdede;
-         label{
 
-         }
-         h3{
-             color:$primary-color;
-             font-size: 24px;
-             margin-bottom: 15px;
-         }
-     }
-     
+        @extend .animate-in;
+        @include transition(all, 500ms 300ms, ease);
+
+    }
+    fieldset{
+        background:#fff;
+        border:1px solid #dfdede;
+        label{
+
+        }
+        h3{
+            color:$primary-color;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+    }
 }
 
+.field-repeater{
+  width:100%;
+  padding-left: .9375rem;
+  padding-right: .9375rem;
+
+  .column{
+    margin:0 0 1rem;
+    float:left !important;
+
+    input,
+    select,
+    textarea{
+      margin:0 0 .25rem;
+    }
+  }
+
+  .field-group-container{
+    margin-left:2rem;
+  }
+
+  .field-repeater-remove{
+    clear:both;
+    float:right;
+    font-size:.8rem;
+    padding:.5em .75em;
+    margin:0 .9375rem 0 0;
+  }
+
+  .field-repeater-add{
+    font-size:.8rem;
+    padding:.5em .75em;
+  }
+}
 
 
